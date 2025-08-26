@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Escape - Two-Player Challenge</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Authentication Screen -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <div class="lab-logo">
+                <i class="fas fa-flask"></i>
+                <h1>LAB ESCAPE</h1>
+                <p class="tagline">Two-Player Challenge</p>
+            </div>
+            
+            <div class="auth-forms">
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form active">
+                    <h2>Enter the Lab</h2>
+                    <form>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="login-username" placeholder="Username" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            <span>Access Lab</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                    <p class="auth-switch">New researcher? <a href="#" id="show-signup">Create Account</a></p>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signup-form" class="auth-form">
+                    <h2>Join the Lab</h2>
+                    <form>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="signup-username" placeholder="Choose Username" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signup-email" placeholder="Email Address" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signup-password" placeholder="Create Password" required>
+                        </div>
+                        <button type="submit" class="auth-btn">
+                            <span>Create Account</span>
+                            <i class="fas fa-user-plus"></i>
+                        </button>
+                    </form>
+                    <p class="auth-switch">Already registered? <a href="#" id="show-login">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room System Screen -->
+    <div id="room-screen" class="screen">
+        <div class="room-container">
+            <div class="lab-header">
+                <h1><i class="fas fa-door-open"></i> Lab Access Terminal</h1>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="current-user">Dr. Player</span>
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="room-options">
+                <!-- Create Room -->
+                <div class="room-card">
+                    <div class="room-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Initialize Lab Session</h3>
+                    <p>Create a new lab session and generate access code</p>
+                    <button id="create-room-btn" class="room-btn primary">
+                        <span>Initialize Session</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Join Room -->
+                <div class="room-card">
+                    <div class="room-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <h3>Join Lab Session</h3>
+                    <p>Enter the access code to join existing session</p>
+                    <div class="input-group">
+                        <i class="fas fa-key"></i>
+                        <input type="text" id="room-code-input" placeholder="Enter Access Code" maxlength="6">
+                    </div>
+                    <button id="join-room-btn" class="room-btn secondary">
+                        <span>Access Lab</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Created Screen -->
+    <div id="room-created-screen" class="screen">
+        <div class="room-created-container">
+            <div class="lab-doors">
+                <div class="door door-left"></div>
+                <div class="door door-right"></div>
+                <div class="door-content">
+                    <i class="fas fa-flask"></i>
+                    <h2>Lab Session Initialized</h2>
+                    <div class="access-code">
+                        <p>Share this access code with your partner:</p>
+                        <div class="code-display">
+                            <span id="generated-code">ABC123</span>
+                            <button id="copy-code-btn" class="copy-btn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="waiting-status">
+                        <div class="pulse-loader"></div>
+                        <p>Waiting for second researcher to join...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Lobby Screen -->
+    <div id="lobby-screen" class="screen">
+        <div class="lobby-container">
+            <div class="lab-header">
+                <h1><i class="fas fa-users"></i> Lab Team Assembly</h1>
+                <div class="timer-display">
+                    <i class="fas fa-clock"></i>
+                    <span id="global-timer">25:00</span>
+                </div>
+            </div>
+
+            <div class="team-info">
+                <div class="player-card">
+                    <div class="player-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Lead Researcher</h3>
+                    <p id="player1-name">Dr. Player 1</p>
+                </div>
+                
+                <div class="vs-indicator">
+                    <div class="lab-symbol">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <p>TEAM</p>
+                </div>
+
+                <div class="player-card">
+                    <div class="player-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Research Partner</h3>
+                    <p id="player2-name">Dr. Player 2</p>
+                </div>
+            </div>
+
+            <div class="mission-briefing">
+                <h3><i class="fas fa-exclamation-triangle"></i> Mission Briefing</h3>
+                <p>Your team has 25 minutes to complete 4 challenging rounds and escape the lab. Work together to solve puzzles, crack codes, and demonstrate your technical knowledge!</p>
+                
+                <div class="rounds-preview">
+                    <div class="round-preview">
+                        <i class="fas fa-search"></i>
+                        <span>Link & Think</span>
+                    </div>
+                    <div class="round-preview">
+                        <i class="fas fa-lock"></i>
+                        <span>Hack & Crack</span>
+                    </div>
+                    <div class="round-preview">
+                        <i class="fas fa-font"></i>
+                        <span>Acronym Arena</span>
+                    </div>
+                    <div class="round-preview">
+                        <i class="fas fa-code"></i>
+                        <span>Compile & Conquer</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-game-btn" class="start-game-btn">
+                <span>Begin Lab Challenge</span>
+                <i class="fas fa-play"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <!-- Game Header -->
+            <div class="game-header">
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <span class="round-indicator">Completed: <span id="current-round">0</span> / 4</span>
+                </div>
+                
+                <div class="timer-section">
+                    <div class="global-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="game-global-timer">25:00</span>
+                    </div>
+                    <div class="round-timer" id="round-timer-display" style="display: none;">
+                        <i class="fas fa-stopwatch"></i>
+                        <span id="round-timer">20</span>s
+                    </div>
+                </div>
+
+                <div class="score-section">
+                    <div class="team-score">
+                        <i class="fas fa-trophy"></i>
+                        <span id="team-score">0</span> points
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Content Area -->
+            <div class="game-content">
+                <div class="round-header">
+                    <h2 id="round-title">Link & Think</h2>
+                    <p id="round-description">Analyze the clues and identify the tech terms</p>
+                </div>
+
+                <div class="challenge-area">
+                    <div id="challenge-content">
+                        <!-- Dynamic content for each round -->
+                    </div>
+                    
+                    <div class="answer-section">
+                        <div class="input-group">
+                            <input type="text" id="answer-input" placeholder="Enter your answer...">
+                            <button id="submit-answer" class="submit-btn">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                        <div id="feedback-message" class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Round Button -->
+            <button id="next-round-btn" class="next-round-btn" style="display: none;">
+                <span>Proceed to Next Challenge</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Screen -->
+    <div id="leaderboard-screen" class="screen">
+        <div class="leaderboard-container">
+            <div class="results-header">
+                <div class="result-animation" id="result-animation">
+                    <div class="animation-content">
+                        <i class="fas fa-trophy result-icon"></i>
+                        <h1 id="result-title">Mission Complete!</h1>
+                        <p id="result-subtitle">Lab Escape Successful</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Team Score</h3>
+                        <span id="final-score">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Time Taken</h3>
+                        <span id="final-time">00:00</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Success Rate</h3>
+                        <span id="success-rate">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="round-summary">
+                <h3><i class="fas fa-list"></i> Challenge Summary</h3>
+                <div id="rounds-summary">
+                    <!-- Round summaries will be populated here -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="export-pdf-btn" class="action-btn primary">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Export Report</span>
+                </button>
+                
+                <button id="play-again-btn" class="action-btn secondary">
+                    <i class="fas fa-redo"></i>
+                    <span>New Challenge</span>
+                </button>
+
+                <button id="view-history-btn" class="action-btn">
+                    <i class="fas fa-history"></i>
+                    <span>Game History</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game History Modal -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-history"></i> Game History</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="history-list">
+                    <!-- Game history will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
